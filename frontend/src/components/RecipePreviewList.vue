@@ -1,75 +1,43 @@
 <template>
-  <b-container>
-    <h3>
-      {{ title }}:
-      <slot></slot>
-    </h3>
-    <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
-        <RecipePreview class="recipePreview" :recipe="r" />
-      </b-col>
-    </b-row>
-  </b-container>
+  <div class="container mt-4">
+    <h3>{{ title }}</h3>
+    <div v-if="recipes.length === 0" class="text-muted text-center py-3">
+      No recipes found.
+    </div>
+    <div class="row">
+      <div
+        v-for="recipe in recipes"
+        :key="recipe.recipe_id || recipe.id"
+        class="col-md-4 mb-4"
+      >
+        <RecipePreview
+          :recipe="recipe"
+          :favorites="favorites"
+          :viewed-ids="viewedIds"
+          @favorite-toggled="$emit('favorite-toggled', $event)"
+        />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import RecipePreview from "./RecipePreview.vue";
-export default {
-  name: "RecipePreviewList",
-  components: {
-    RecipePreview
-  },
-  props: {
-    title: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      recipes: []
-    };
-  },
-  mounted() {
-    this.updateRecipes();
-  },
-  methods: {
-    async updateRecipes() {
-      try {
-        const response = await this.axios.get(
-          "https://api.spoonacular.com/recipes/random",
-          {
-            params: {
-              limitLicense: true,
-              number: 3,
-              apiKey: 'b7b147413c244375812ccb826d79cdcc'
-            }
-          }
-        );
+import RecipePreview from './RecipePreview.vue';
 
-        console.log("response: ", response);
-        const recipes = response.data.recipes.map((r) => {
-          return {
-            id: r.id,
-            title: r.title,
-            readyInMinutes: r.readyInMinutes,
-            image: r.image,
-            aggregateLikes: r.aggregateLikes
-          };
-        });
-        this.recipes = [];
-        this.recipes.push(...recipes);
-        console.log("recipes:  " , this.recipes);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+export default {
+  name: 'RecipePreviewList',
+  components: { RecipePreview },
+  props: {
+    title: { type: String, required: true },
+    recipes: { type: Array, required: true },
+    favorites: { type: Array, default: () => [] },
+    viewedIds: { type: Array, default: () => [] }
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .container {
-  min-height: 400px;
+  min-height: 300px;
 }
 </style>

@@ -1,24 +1,28 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import routes from './router/index';
+import router from './router/index';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-import { createRouter, createWebHistory } from 'vue-router';
+// import { createRouter, createWebHistory } from 'vue-router';
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/js/all.js";
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+import BootstrapVue3 from 'bootstrap-vue-3';
 
 import store from './store';
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes
-});
+import "@/scss/main.scss";
 
 const app = createApp(App);
 
 app.use(router);
 app.use(VueAxios, axios);
+app.use(BootstrapVue3);
+
+axios.defaults.baseURL = 'https://wtfood.cs.bgu.ac.il';
+axios.defaults.withCredentials = true;
 
 app.config.globalProperties.store = store;
 
