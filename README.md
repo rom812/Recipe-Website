@@ -37,7 +37,7 @@ Recipe-Website/
 
 ---
 
-## 🚀 Getting Started  
+## 🚀 Getting Started
 
 ### Prerequisites  
 - Node.js ≥ 16 & npm ≥ 8  
@@ -71,12 +71,27 @@ npm run build
 
 ---
 
-### Backend with Docker  
+### Backend with Docker
 ```bash
 cd backend
 docker build -t recipe-api .
 docker run -p 3000:3000 recipe-api
 ```
+
+---
+
+## 🌐 Deployment
+
+The repository includes a GitHub Actions workflow that builds the Vue frontend and deploys it to **GitHub Pages** whenever changes are pushed to the `main` branch or the workflow is manually dispatched.
+
+### How it works
+1. **Build** – Installs frontend dependencies with `npm ci` and runs `npm run build`.
+2. **Publish** – Uploads the contents of `frontend/dist` as a Pages artifact and deploys it using `actions/deploy-pages`.
+
+### Enabling Pages
+1. Open **Settings → Pages** in your GitHub repository.
+2. Set **Source** to **GitHub Actions**.
+3. Trigger a push to `main` (or use the **Run workflow** button) to publish the latest build.
 
 ---
 
